@@ -34,6 +34,8 @@ sam_cnn_layer = Layers(args, model).sam_cnn_layer
 
 fig = plt.figure(figsize=(30,50))
 
+cropped_feature_map = []
+
 for i, image in enumerate(images):
     
     image = image.unsqueeze(0).to(device)
@@ -53,30 +55,15 @@ for i, image in enumerate(images):
     value_to_save = []
     i = 0
     for array in (max_x_conv):
-        print (i)
-        print (array)
+        #print (i)
+        #print (array)
         for x in (array):    
             if x >= 0.5: value_to_save.append([i, x])
             i = i + 1
-        
-    print (value_to_save)
-    #print (value_to_save.size())
-    print (len(value_to_save))
-    number, values = value_to_save[0]
-    print (number)
-    #dataiter = iter(value_to_save)
-    #numbers, values = next(dataiter)
-    #print (numbers)
     
-    
-    
-    
-    
-    
-    break
-    
-    
-
-
-    
-    
+    cropped_feature_map.append(value_to_save)
+    #print (value_to_save)
+    #print (len(value_to_save))
+    #number, values = value_to_save[0]
+    #print (number)
+print (len(cropped_feature_map))
