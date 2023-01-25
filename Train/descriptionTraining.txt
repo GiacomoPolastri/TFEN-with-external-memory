@@ -1,0 +1,6 @@
+Train 0:
+epochs 300
+lr = 0.01
+momentum = 0.9
+wd = 5e-5
+da = 0.2
