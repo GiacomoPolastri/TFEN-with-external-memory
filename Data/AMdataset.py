@@ -1,5 +1,4 @@
 
-
 import fiftyone as fo 
 
 dataset_type = fo.types.COCODetectionDataset
