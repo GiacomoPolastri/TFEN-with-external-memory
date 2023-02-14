@@ -1,4 +1,5 @@
 
+
 import fiftyone as fo 
 
 dataset_type = fo.types.COCODetectionDataset
@@ -66,5 +67,5 @@ if __name__ == "__main__":
     validset = fo.load_dataset('Aerial_Maritime_validset')
     print (validset)
     
-    session = fo.launch_app(validset, desktop=True)
-    session.wait()
+    #session = fo.launch_app(validset, desktop=True)
+    #session.wait()
