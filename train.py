@@ -18,17 +18,16 @@ from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
 
-from detectron2.structures import BoxMode
-
 from Models.mobilenetv2 import mobilenetv2
 from Data.AMdataset import GetDataset
+from utils import get_device
+from Data.utils import get_fiftyone_dicts
 
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = get_device()
 model = mobilenetv2()
 model.to(device)
 
 trainset = GetDataset().train_set
 
-trainset.compute_metadata()
 
 

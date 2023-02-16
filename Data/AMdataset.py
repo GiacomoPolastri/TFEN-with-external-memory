@@ -24,6 +24,8 @@ class LoaDataset():
             name = name
         )   
         
+        traintest.persistent = True
+        
         return traintest
     
     def loadValidset(self):
@@ -38,6 +40,8 @@ class LoaDataset():
             labels_path = label_path,
             name = name
         )   
+        
+        validtest.persistent = True
 
         return validtest
     
@@ -54,13 +58,15 @@ class LoaDataset():
             name = name
         )   
 
+        testset.persistent = True
+        
         return testset
 
 class GetDataset():
     
     def __init__(self):
         
-        self.datasets = self.check_dataset()
+        #self.datasets = self.check_dataset()
         self.train_set = fo.load_dataset("Aerial_Maritime_trainset")
         self.valid_set = fo.load_dataset("Aerial_Maritime_validset")
         self.test_set = fo.load_dataset("Aerial_Maritime_testset")
@@ -77,11 +83,9 @@ if __name__ == "__main__":
     
     trainset = GetDataset().train_set
     trainset.compute_metadata()
-    session = fo.launch_app(trainset, desktop=True)
-    session.wait()
-
+    fo.pprint(trainset.stats(include_media=True))
     
-    #print (LoaDataset().trainset)
+    
     #if fo.dataset_exists('Aerial_Maritime_trainset'):
     #    print ('yes')
     #    
