@@ -1,3 +1,6 @@
+import fiftyone as fo 
+from fiftyone import ViewField as F
+
 # Import PyTorch and Detectron2
 import torch, detectron2
 
@@ -29,5 +32,12 @@ model.to(device)
 
 trainset = GetDataset().train_set
 
+print(trainset)
+
+session = fo.launch_app(trainset, desktop=True)
+session.wait()
 
 
+
+#print (trainset.match_tags)
+#DatasetCatalog.register("trainset", get_fiftyone_dicts(trainset))

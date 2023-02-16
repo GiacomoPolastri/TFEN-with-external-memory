@@ -21,7 +21,7 @@ class LoaDataset():
             data_path = trainSet_dir,
             dataset_type = dataset_type,
             labels_path = label_path,
-            name = name
+            name = name,
         )   
         
         traintest.persistent = True
@@ -81,10 +81,17 @@ class GetDataset():
 
 if __name__ == "__main__":
     
-    trainset = GetDataset().train_set
-    trainset.compute_metadata()
-    fo.pprint(trainset.stats(include_media=True))
+    classifications_dataset = fo.Dataset.from_dir(
+        dataset_dir = "./Inputs/Aerial_Maritime.v9-tiled.coco",
+        dataset_type = fo.types.ImageClassificationDirectoryTree,
+        name = "Aerial_Maritime.v9"
+    )
+    classifications_dataset.persistent = True
     
+    print(classifications_dataset)
+    
+    session = fo.launch_app(classifications_dataset, desktop=True)
+    session.wait()
     
     #if fo.dataset_exists('Aerial_Maritime_trainset'):
     #    print ('yes')
