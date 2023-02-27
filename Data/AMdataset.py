@@ -14,7 +14,7 @@ class LoaDataset():
     def loadTrainset(self):
     
         name = "Aerial_Maritime_trainset"
-        trainSet_dir = dataset_dir + "train"
+        trainSet_dir = dataset_dir + "train" + "/data"
         label_path = trainSet_dir + "/_annotations.coco.json"
         
         traintest = fo.Dataset.from_dir(
@@ -66,7 +66,7 @@ class GetDataset():
     
     def __init__(self):
         
-        #self.datasets = self.check_dataset()
+        self.datasets = self.check_dataset()
         self.train_set = fo.load_dataset("Aerial_Maritime_trainset")
         self.valid_set = fo.load_dataset("Aerial_Maritime_validset")
         self.test_set = fo.load_dataset("Aerial_Maritime_testset")
@@ -81,14 +81,9 @@ class GetDataset():
 
 if __name__ == "__main__":
     
-    classifications_dataset = fo.Dataset.from_dir(
-        dataset_dir = "./Inputs/Aerial_Maritime.v9-tiled.coco",
-        dataset_type = fo.types.ImageClassificationDirectoryTree,
-        name = "Aerial_Maritime.v9"
-    )
-    classifications_dataset.persistent = True
+    classifications_dataset = fo.load_dataset("Aerial_Maritime.v9")
     
-    print(classifications_dataset)
+    a = LoaDataset()
     
     session = fo.launch_app(classifications_dataset, desktop=True)
     session.wait()

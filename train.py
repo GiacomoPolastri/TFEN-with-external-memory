@@ -26,18 +26,23 @@ from Data.AMdataset import GetDataset
 from utils import get_device
 from Data.utils import get_fiftyone_dicts
 
-device = get_device()
-model = mobilenetv2()
-model.to(device)
+#device = get_device()
+#model = mobilenetv2()
+#model.to(device)
 
-trainset = GetDataset().train_set
+dataset = fo.load_dataset("Aerial_Maritime.v9")
 
-print(trainset)
-
-session = fo.launch_app(trainset, desktop=True)
-session.wait()
-
-
-
-#print (trainset.match_tags)
-#DatasetCatalog.register("trainset", get_fiftyone_dicts(trainset))
+for d in ['train', 'valid', 'test']:
+    
+    view = dataset.match_tags(d)
+    DatasetCatalog.register("AM_"+ d, lambda view = view : get_fiftyone_dicts(view))
+    MetadataCatalog.get("AM_"+ d)
+    
+metadata = MetadataCatalog.get('AM_train')
+print (metadata)
+#dataset_dicts = get_fiftyone_dicts(dataset.match_tags("train"))
+#ids = [dd["image_id"] for dd in dataset_dicts]
+#
+#view = dataset.select(ids)
+#session = fo.launch_app(view)
+#session.wait()

@@ -4,7 +4,7 @@ def get_fiftyone_dicts(samples):
     samples.compute_metadata()
 
     dataset_dicts = []
-    for sample in samples.select_fields(["id", "filepath", "metadata", "segmentations"]):
+    for sample in samples.select_fields(["id", "filepath", "metadata"]):
         height = sample.metadata["height"]
         width = sample.metadata["width"]
         record = {}
