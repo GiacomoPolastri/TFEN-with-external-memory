@@ -36,7 +36,7 @@ for d in ['train', 'valid', 'test']:
     
     view = dataset.match_tags(d)
     DatasetCatalog.register("AM_"+ d, lambda view = view : get_fiftyone_dicts(view))
-    MetadataCatalog.get("AM_"+ d)
+    MetadataCatalog.get("AM_"+ d).set(thing_classes = [''])
     
 metadata = MetadataCatalog.get('AM_train')
 print (metadata)

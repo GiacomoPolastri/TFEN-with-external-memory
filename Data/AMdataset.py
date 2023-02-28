@@ -14,11 +14,11 @@ class LoaDataset():
     def loadTrainset(self):
     
         name = "Aerial_Maritime_trainset"
-        trainSet_dir = dataset_dir + "train" + "/data"
+        trainSet_dir = dataset_dir + "train"
         label_path = trainSet_dir + "/_annotations.coco.json"
         
         traintest = fo.Dataset.from_dir(
-            data_path = trainSet_dir,
+            data_path = trainSet_dir + "/data",
             dataset_type = dataset_type,
             labels_path = label_path,
             name = name,
