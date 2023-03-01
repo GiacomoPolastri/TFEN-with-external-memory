@@ -26,23 +26,18 @@ from Data.AMdataset import GetDataset
 from utils import get_device
 from Data.utils import get_fiftyone_dicts
 
-#device = get_device()
-#model = mobilenetv2()
+# Set model and device
+"""
+device = get_device()
+model = mobilenetv2()
 #model.to(device)
+"""
 
-dataset = fo.load_dataset("Aerial_Maritime.v9")
+# Load dataset and prepare the dataset for Detectron2
+trainset = fo.load_dataset('Aerial_Maritime_trainset')
+view = trainset.match_tags('train')
+DatasetCatalog.register('train', lambda view = view: get_fiftyone_dicts(view))
+MetadataCatalog.get('train')
+metadata = MetadataCatalog.get('train')
 
-for d in ['train', 'valid', 'test']:
-    
-    view = dataset.match_tags(d)
-    DatasetCatalog.register("AM_"+ d, lambda view = view : get_fiftyone_dicts(view))
-    MetadataCatalog.get("AM_"+ d).set(thing_classes = [''])
-    
-metadata = MetadataCatalog.get('AM_train')
-print (metadata)
-#dataset_dicts = get_fiftyone_dicts(dataset.match_tags("train"))
-#ids = [dd["image_id"] for dd in dataset_dicts]
-#
-#view = dataset.select(ids)
-#session = fo.launch_app(view)
-#session.wait()
+# Detectron configuration
