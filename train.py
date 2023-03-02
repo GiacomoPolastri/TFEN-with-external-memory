@@ -19,6 +19,7 @@ from detectron2 import model_zoo
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
+from detectron2.utils.events import EventStorage
 from detectron2.data import MetadataCatalog, DatasetCatalog
 from detectron2.modeling import build_model
 
@@ -61,3 +62,15 @@ MetadataCatalog.get('train')
 metadata = MetadataCatalog.get('train')
 
 # Detectron configuration
+
+# Training
+
+# Use a Model
+# When in training mode, all models are required to be used under an 
+# EventStorage. 
+# The traing statistic will be put into the storage
+# EventStorage example
+"""
+with EventStorage() as storage:
+    losses = model(inputs) # input is a list[dict]
+"""
