@@ -55,21 +55,39 @@ checkpointer = DetectionCheckpointer(model, save_dir = "Train")
 checkpointer.save("training_number_" + str(numberOfCheckpoint))
 """
 
-# Load dataset and prepare the dataset for Detectron2
+# Load trainset and prepare the dataset for Detectron2
 trainset = fo.load_dataset('Aerial_Maritime_trainset')
-view = trainset.match_tags('train')
-DatasetCatalog.register('train', lambda view = view: get_fiftyone_dicts(view))
+view_train = trainset.match_tags('train')
+DatasetCatalog.register('train', lambda view = view_train: get_fiftyone_dicts(view))
 MetadataCatalog.get('train')
-metadata = MetadataCatalog.get('train')
+metadata_train = MetadataCatalog.get('train')
+
+# LOad validationset and prepare the dataset for Detectron2
+validset = fo.load_dataset('Aerial_Maritime_validset')
+view_valid = trainset.match_tags('valid')
+DatasetCatalog.register('valid', lambda view = view_valid: get_fiftyone_dicts(view))
+MetadataCatalog.get('valid')
+metadata_valid = MetadataCatalog.get('valid')
 
 # Detectron configuration
-"""
+
 def setup_cfg(args):
     # load config from file and command-line arguments
     cfg = get_cfg()
     # Set all the configuration
+    cfg.merge_from_file()
+    cfg.DATASETS.TRAIN = ("train")
+    cfg.DATASETS.TEST = () # Maybe put here the validation set
+    cfg.DATALOADER.NUM_WORKERS = 8
+    cfg.MODEL.WEIGHTS = ()
+    cfg.SOLVER.IMS_PER_BATCH =   # Number of training examples per batch utilized in one iteration
+    cfg.SOLVER.BASE_LR = args.learning_rate #example 0.00025
+    cfg.SOLVER.MAX_ITER = args.ephocs
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = args.batch_size
+    cfg.MODEL.ROI_HEADS.NUM_CLASSES = 5
+    cfg.TEST.DETECTIONS_PER_IMAGE = args.number_detections
+    
     return cfg
-"""
 
 # Training
 

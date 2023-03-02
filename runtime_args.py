@@ -16,7 +16,7 @@ parser.add_argument('-e','--epochs', default = 301, type=int,
                     help = 'Number of epochs to run (default 301')
 parser.add_argument('-b', '--batch_size', default = 128, type=int,
                     help='mini-batch size (default: 128)')
-parser.add_argument('-lr', '--learning-rate', default = 0.01, type=float, 
+parser.add_argument('-lr', '--learning_rate', default = 0.01, type=float, 
                     help = 'learning rate (default 0.01)', dest = 'lr')
 parser.add_argument('-m','--momentum', default=0.9, type=float,
                     help='momentum  (default 0.9)')
@@ -49,6 +49,7 @@ parser.add_argument('-cam', '--cam', default=False, type=bool,
                     help='get cam output (default False')
 parser.add_argument('-last', '--last_cnn_layer', default=False, type=bool,
                     help=' gets the last cnn layer (default False)')
-
+parser.add_argument('-n_det', '--number_detections', default=10, type=int, 
+                    help = "number of object inside an image (default 10)")
 
 args = parser.parse_args()
