@@ -29,12 +29,13 @@ from Data.AMdataset import GetDataset
 from utils import get_device
 from Data.utils import get_fiftyone_dicts
 from Checkpoint.detection_checkpoint import DetectionCheckpointer
+from runtime_args import args
 
 # Set model and device
-"""
 device = get_device()
 model = mobilenetv2()
 model.to(device)
+"""
 # Use Model
 # 
 # From a yacs config object, 
@@ -62,6 +63,13 @@ MetadataCatalog.get('train')
 metadata = MetadataCatalog.get('train')
 
 # Detectron configuration
+"""
+def setup_cfg(args):
+    # load config from file and command-line arguments
+    cfg = get_cfg()
+    # Set all the configuration
+    return cfg
+"""
 
 # Training
 
