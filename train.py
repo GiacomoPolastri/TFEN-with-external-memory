@@ -20,17 +20,37 @@ from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
+from detectron2.modeling import build_model
 
 from Models.mobilenetv2 import mobilenetv2
+from Models.utils import get_number_model
 from Data.AMdataset import GetDataset
 from utils import get_device
 from Data.utils import get_fiftyone_dicts
+from Checkpoint.detection_checkpoint import DetectionCheckpointer
 
 # Set model and device
 """
 device = get_device()
 model = mobilenetv2()
-#model.to(device)
+model.to(device)
+# Use Model
+# 
+# From a yacs config object, 
+# models can be built by functions: 
+# build_model, build_backbone, build_roi_heads
+# 
+# build model: only builds the model structure 
+# and fills it with random parameters. 
+model = build_model(cfg)
+"""
+
+# Load / Save a Checkpoint
+"""
+DetectionCheckpointer(model).load(cfg.MODEL.WEIGHTS) # file with weights saved
+numberOfCheckpoint = get_number_model()
+checkpointer = DetectionCheckpointer(model, save_dir = "Train")
+checkpointer.save("training_number_" + str(numberOfCheckpoint))
 """
 
 # Load dataset and prepare the dataset for Detectron2
