@@ -28,7 +28,7 @@ from Models.utils import get_number_model
 from Data.AMdataset import GetDataset
 from utils import get_device
 from Data.utils import get_fiftyone_dicts
-from Checkpoint.detection_checkpoint import DetectionCheckpointer
+from detectron2.checkpoint.detection_checkpoint import DetectionCheckpointer
 from runtime_args import args
 
 # Set model and device
@@ -73,12 +73,12 @@ metadata_valid = MetadataCatalog.get('valid')
 # Load config from file and command-line arguments
 cfg = get_cfg()
 # Set all the configuration
-cfg.merge_from_file()
+#cfg.merge_from_file()
 cfg.DATASETS.TRAIN = ("train")
-cfg.DATASETS.TEST = () # Maybe put here the validation set
+cfg.DATASETS.TEST = ("valid") # Maybe put here the validation set
 cfg.DATALOADER.NUM_WORKERS = 8
 cfg.MODEL.WEIGHTS = ()
-cfg.SOLVER.IMS_PER_BATCH =   # Number of training examples per batch utilized in one iteration
+cfg.SOLVER.IMS_PER_BATCH = 2  # Number of training examples per batch utilized in one iteration
 cfg.SOLVER.BASE_LR = args.learning_rate #example 0.00025
 cfg.SOLVER.MAX_ITER = args.ephocs
 cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = args.batch_size
