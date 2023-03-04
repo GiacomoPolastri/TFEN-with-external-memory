@@ -8,17 +8,17 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-is', '--input_size', type=int, default=224, 
+parser.add_argument('--input_size', type=int, default=224, 
                     help='size of the input file (default 224)')
-parser.add_argument('-j', '--workers', default=16, type=int,
+parser.add_argument('--workers', default=16, type=int,
                     help='Number of data loading workers (default 16)')
-parser.add_argument('-e','--epochs', default = 301, type=int, 
+parser.add_argument('--epochs', default = 301, type=int, 
                     help = 'Number of epochs to run (default 301')
-parser.add_argument('-b', '--batch_size', default = 128, type=int,
+parser.add_argument('--batch_size', default = 128, type=int,
                     help='mini-batch size (default: 128)')
-parser.add_argument('-lr', '--learning_rate', default = 0.01, type=float, 
-                    help = 'learning rate (default 0.01)', dest = 'lr')
-parser.add_argument('-m','--momentum', default=0.9, type=float,
+parser.add_argument('--learning_rate', default = 0.01, type=float, 
+                    help = 'learning rate (default 0.01)')
+parser.add_argument('--momentum', default=0.9, type=float,
                     help='momentum  (default 0.9)')
 parser.add_argument('-wd', '--weight-decay', default=5e-5, type=float,
                     help='weight decay (default: 5e-5)',
