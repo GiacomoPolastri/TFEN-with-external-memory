@@ -23,29 +23,13 @@ from detectron2.utils.events import EventStorage
 from detectron2.data import MetadataCatalog, DatasetCatalog
 from detectron2.modeling import build_model
 
-from Models.mobilenetv2 import mobilenetv2
 from Models.utils import get_number_model
 from Data.AMdataset import GetDataset
 from utils import get_device
 from Data.utils import get_fiftyone_dicts
 from detectron2.checkpoint.detection_checkpoint import DetectionCheckpointer
 from runtime_args import args
-
-# Set model and device
-device = get_device()
-model = mobilenetv2()
-model.to(device)
-"""
-# Use Model
-# 
-# From a yacs config object, 
-# models can be built by functions: 
-# build_model, build_backbone, build_roi_heads
-# 
-# build model: only builds the model structure 
-# and fills it with random parameters. 
-model = build_model(cfg)
-"""
+from Models.mobilenetv2 import build_mobilenetv2_fpn_backbone
 
 # Load / Save a Checkpoint
 """
@@ -73,7 +57,7 @@ metadata_valid = MetadataCatalog.get('valid')
 # Load config from file and command-line arguments
 cfg = get_cfg()
 # Set all the configuration
-#cfg.merge_from_file()
+#cfg.merge_from_file("./Models/mobilenetv2.py")
 cfg.DATASETS.TRAIN = ("train")
 cfg.DATASETS.TEST = ("valid") # Maybe put here the validation set
 cfg.DATALOADER.NUM_WORKERS = 8
@@ -84,6 +68,24 @@ cfg.SOLVER.MAX_ITER = args.epochs
 cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = args.batch_size
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 5
 cfg.TEST.DETECTIONS_PER_IMAGE = args.number_detections
+#cfg.MODEL.BACKBONE.NAME = "mobilenetv2"
+
+# Set model and device
+device = get_device()
+backbone = build_mobilenetv2_fpn_backbone(cfg)
+model =build_model(cfg) # or set it in the config file
+model.to(device)
+"""
+# Use Model
+# 
+# From a yacs config object, 
+# models can be built by functions: 
+# build_model, build_backbone, build_roi_heads
+# 
+# build model: only builds the model structure 
+# and fills it with random parameters. 
+model = build_model(cfg)
+"""
 
 
 # Training
