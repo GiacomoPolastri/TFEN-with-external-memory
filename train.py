@@ -73,7 +73,7 @@ cfg.TEST.DETECTIONS_PER_IMAGE = args.number_detections
 device = get_device()
 backbone = build_mnv2_backbone(cfg, 224)
 model = build_model(cfg) # or set it in the config file
-#model.to(device)
+model.to(device)
 
 """
 # Use Model
