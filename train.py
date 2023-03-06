@@ -29,8 +29,7 @@ from utils import get_device
 from Data.utils import get_fiftyone_dicts
 from detectron2.checkpoint.detection_checkpoint import DetectionCheckpointer
 from runtime_args import args
-from Models.mobilenetv2 import build_mobilenetv2_fpn_backbone
-
+from Models.mobilenetv2 import build_mnv2_backbone
 # Load / Save a Checkpoint
 """
 DetectionCheckpointer(model).load(cfg.MODEL.WEIGHTS) # file with weights saved
@@ -72,9 +71,10 @@ cfg.TEST.DETECTIONS_PER_IMAGE = args.number_detections
 
 # Set model and device
 device = get_device()
-backbone = build_mobilenetv2_fpn_backbone(cfg)
-model =build_model(cfg) # or set it in the config file
-model.to(device)
+backbone = build_mnv2_backbone(cfg, 224)
+model = build_model(cfg) # or set it in the config file
+#model.to(device)
+
 """
 # Use Model
 # 
