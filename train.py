@@ -31,6 +31,7 @@ from detectron2.checkpoint.detection_checkpoint import DetectionCheckpointer
 from runtime_args import args
 from Models.mobilenetv2 import build_mnv2_backbone
 # Load / Save a Checkpoint
+
 """
 DetectionCheckpointer(model).load(cfg.MODEL.WEIGHTS) # file with weights saved
 numberOfCheckpoint = get_number_model()
@@ -53,14 +54,16 @@ MetadataCatalog.get('valid')
 metadata_valid = MetadataCatalog.get('valid')
 
 # Detectron configuration
+# PreTrainer Model
+pretrained_model = "COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"
 # Load config from file and command-line arguments
 cfg = get_cfg()
 # Set all the configuration
-#cfg.merge_from_file("./Models/mobilenetv2.py")
+cfg.merge_from_file(model_zoo.get_config_file(pretrained_model))
+cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(pretrained_model)  # Let training initialize from model zoo
 cfg.DATASETS.TRAIN = ("train")
 cfg.DATASETS.TEST = ("valid") # Maybe put here the validation set
-cfg.DATALOADER.NUM_WORKERS = 8
-cfg.MODEL.WEIGHTS = ()
+cfg.DATALOADER.NUM_WORKERS = 2
 cfg.SOLVER.IMS_PER_BATCH = 2  # Number of training examples per batch utilized in one iteration
 cfg.SOLVER.BASE_LR = args.learning_rate #example 0.00025
 cfg.SOLVER.MAX_ITER = args.epochs
