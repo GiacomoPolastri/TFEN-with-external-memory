@@ -6,6 +6,7 @@ import torch, detectron2
 
 # Setup detectron2 logger
 import detectron2
+from detectron2.engine.defaults import DefaultTrainer
 from detectron2.utils.logger import setup_logger
 setup_logger()
 
@@ -29,9 +30,9 @@ from utils import get_device
 from Data.utils import get_fiftyone_dicts
 from detectron2.checkpoint.detection_checkpoint import DetectionCheckpointer
 from runtime_args import args
-from Models.mobilenetv2 import build_mobilenetv2_fpn_backbone
-
+from Models.mobilenetv2 import build_mnv2_backbone
 # Load / Save a Checkpoint
+
 """
 DetectionCheckpointer(model).load(cfg.MODEL.WEIGHTS) # file with weights saved
 numberOfCheckpoint = get_number_model()
@@ -54,14 +55,17 @@ MetadataCatalog.get('valid')
 metadata_valid = MetadataCatalog.get('valid')
 
 # Detectron configuration
+# PreTrainer Model
+pretrained_model = "COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"
 # Load config from file and command-line arguments
 cfg = get_cfg()
 # Set all the configuration
-#cfg.merge_from_file("./Models/mobilenetv2.py")
+backbone = build_mnv2_backbone(cfg, 224)
+cfg.merge_from_file(model_zoo.get_config_file(pretrained_model))
+cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(pretrained_model)  # Let training initialize from model zoo
 cfg.DATASETS.TRAIN = ("train")
 cfg.DATASETS.TEST = ("valid") # Maybe put here the validation set
-cfg.DATALOADER.NUM_WORKERS = 8
-cfg.MODEL.WEIGHTS = ()
+cfg.DATALOADER.NUM_WORKERS = 2
 cfg.SOLVER.IMS_PER_BATCH = 2  # Number of training examples per batch utilized in one iteration
 cfg.SOLVER.BASE_LR = args.learning_rate #example 0.00025
 cfg.SOLVER.MAX_ITER = args.epochs
@@ -72,9 +76,9 @@ cfg.TEST.DETECTIONS_PER_IMAGE = args.number_detections
 
 # Set model and device
 device = get_device()
-backbone = build_mobilenetv2_fpn_backbone(cfg)
-model =build_model(cfg) # or set it in the config file
+model = build_model(cfg) # or set it in the config file
 model.to(device)
+
 """
 # Use Model
 # 
@@ -89,12 +93,12 @@ model = build_model(cfg)
 
 
 # Training
-"""
-os.makedirs(cfg.OUTPUT_DIR, exist = True)
+
+os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 trainer = DefaultTrainer(cfg)
 trainer.resume_or_load(resume=False)
 trainer.train()
-"""
+
 
 # Use a Model
 # When in training mode, all models are required to be used under an 

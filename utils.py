@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from torchvision import transforms
 import torch.nn as nn
 
-from Models.mobilenetv2 import mobilenetv2
+#from Models.mobilenetv2 import mobilenetv2
 
 def swap(img):
     img = img.swapaxes(0, 1)

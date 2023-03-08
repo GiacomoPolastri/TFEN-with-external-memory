@@ -33,6 +33,8 @@ DatasetCatalog.register('train', lambda view = view: get_fiftyone_dicts(view))
 MetadataCatalog.get('train')
 metadata = MetadataCatalog.get('train')
 
+print (metadata)
+
 # Visualize some samples to make sure everything is being loaded properly
 """
 dataset_dicts = get_fiftyone_dicts(view)
