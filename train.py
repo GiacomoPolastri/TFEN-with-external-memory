@@ -1,3 +1,4 @@
+from Data.AMdataset import GetDataset
 import torch
 import fiftyone as fo 
 import detectron2
@@ -28,7 +29,7 @@ MetadataCatalog.get('train')
 metadata_train = MetadataCatalog.get('train')
 
 # Load validationset and prepare the dataset for Detectron2
-validset = fo.load_dataset('validset')
+validset = GetDataset().valid_set
 view_valid = validset.match_tags('valid')
 DatasetCatalog.register('valid', lambda view = view_valid: get_fiftyone_dicts(view_valid))
 MetadataCatalog.get('valid')

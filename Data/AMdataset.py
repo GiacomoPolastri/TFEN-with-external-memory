@@ -81,18 +81,5 @@ class GetDataset():
 
 if __name__ == "__main__":
     
-    classifications_dataset = fo.load_dataset("Aerial_Maritime.v9")
-    
-    a = LoaDataset()
-    
-    session = fo.launch_app(classifications_dataset, desktop=True)
+    session = fo.launch_app(desktop=True)
     session.wait()
-    
-    #if fo.dataset_exists('Aerial_Maritime_trainset'):
-    #    print ('yes')
-    #    
-    #validset = fo.load_dataset('Aerial_Maritime_validset')
-    #print (validset)
-    
-    #session = fo.launch_app(validset, desktop=True)
-    #session.wait()

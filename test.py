@@ -16,16 +16,6 @@ from matplotlib import pyplot as plt
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning) 
 
-### TESTSET ###
-"""
-testset = fo.load_dataset('testset')
-view_test = testset.match_tags('test')
-DatasetCatalog.register('test', lambda view = view_test: get_fiftyone_dicts(view_test))
-MetadataCatalog.get('test')
-metadata_test = MetadataCatalog.get('test')
-testset_dict = get_fiftyone_dicts(view_test)
-"""
-
 # validset
 validset = fo.load_dataset('validset')
 view = validset.match_tags('valid')

@@ -32,25 +32,29 @@ from Data.utils import get_fiftyone_dicts
 # Load dataset and prepare the dataset for Detectron2
 ### TRAINSET ###
 trainset = GetDataset().train_set
-trainset.tags.append('train')
-for sample in trainset.iter_samples(progress=True):
-    sample.tags.append('train')
-    sample.save()
-print (trainset)
-print (trainset.first())
-print (trainset.last())
+#trainset.tags.append('train')
+#for sample in trainset.iter_samples(progress=True):
+#    sample.tags.append('train')
+#    sample.save()
+#print (trainset)
+#print (trainset.first())
+#print (trainset.last())
 
 ### VALIDSET ###
 validset = GetDataset().valid_set
-validset.tags.append('valid')
-for sample in validset.iter_samples(progress=True):
-    sample.tags.append('valid')
-    sample.save()
-view = validset.match_tags('valid')
-DatasetCatalog.register('valid', lambda view = view: get_fiftyone_dicts(view))
-MetadataCatalog.get('valid')
-metadata = MetadataCatalog.get('valid')
-fo.pprint(validset.stats(include_media=True))
+#validset.tags.append('valid')
+#for sample in validset.iter_samples(progress=True):
+#    sample.tags.append('valid')
+#    sample.save()
+#validset.persistent = True
+#view = validset.match_tags('valid')
+#DatasetCatalog.register('valid', lambda view = view: get_fiftyone_dicts(view))
+#MetadataCatalog.get('valid')
+#metadata = MetadataCatalog.get('valid')
+#fo.pprint(validset.stats(include_media=True))
+#print (validset)
+#print (validset.first())
+#print (validset.last())
 
 ### TESTSET ###
 testset = GetDataset().test_set
@@ -58,6 +62,8 @@ testset.tags.append('test')
 for sample in testset.iter_samples(progress=True):
     sample.tags.append('test')
     sample.save()
+testset.persistent = True
+"""
 view = testset.match_tags('test')
 DatasetCatalog.register('test', lambda view = view: get_fiftyone_dicts(view))
 MetadataCatalog.get('test')
@@ -69,4 +75,4 @@ dataset_dicts = get_fiftyone_dicts(view)
 ids = [dd["image_id"] for dd in dataset_dicts]
 view = testset.select(ids)
 session = fo.launch_app(view)
-
+"""
