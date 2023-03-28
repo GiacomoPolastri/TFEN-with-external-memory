@@ -1,53 +1,71 @@
 import fiftyone as fo 
 
 dataset_type = fo.types.COCODetectionDataset
-dataset_dir = "./Inputs/Aerial_Maritime.v9-tiled.coco/"
+dataset_dir = "./Inputs/"
 
 class LoaDataset():
     
     def __init__(self):
         
-        self.trainset = self.loadTrainset()
-        self.validset = self.loadValidset()
-        self.testset = self.loadTestset()
+        self.dataset = self.load_all()
+        
+    def load_all(self):
+        
+        trainset = self.loadTrainset()
+        validset = self.loadValidset()
+        testset = self.loadTestset()
+        
+        return trainset, validset, testset
     
     def loadTrainset(self):
     
-        name = "Aerial_Maritime_trainset"
+        name = "trainset"
         trainSet_dir = dataset_dir + "train"
         label_path = trainSet_dir + "/_annotations.coco.json"
         
-        traintest = fo.Dataset.from_dir(
-            data_path = trainSet_dir + "/data",
+        trainset = fo.Dataset.from_dir(
+            data_path = trainSet_dir,
             dataset_type = dataset_type,
             labels_path = label_path,
             name = name,
         )   
         
-        traintest.persistent = True
+        trainset.tags.append('train')
+        for sample in trainset.iter_samples(progress=True):
+            sample.tags.append('train')
+            sample.save()
+        trainset.save()
         
-        return traintest
+        trainset.persistent = True
+        
+        return trainset
     
     def loadValidset(self):
         
-        name = "Aerial_Maritime_validset"
+        name = "validset"
         validSet_dir = dataset_dir + "valid"
         label_path = validSet_dir + "/_annotations.coco.json"
 
-        validtest = fo.Dataset.from_dir(
+        validset = fo.Dataset.from_dir(
             data_path = validSet_dir,
             dataset_type = dataset_type,
             labels_path = label_path,
             name = name
         )   
         
-        validtest.persistent = True
+        validset.tags.append('valid')
+        for sample in validset.iter_samples(progress=True):
+            sample.tags.append('valid')
+            sample.save()
+        validset.save()
+        
+        validset.persistent = True
 
-        return validtest
+        return validset
     
     def loadTestset(self):
         
-        name = "Aerial_Maritime_testset"
+        name = "testset"
         testSet_dir = dataset_dir + "test"
         label_path = testSet_dir + "/_annotations.coco.json"
 
@@ -58,6 +76,12 @@ class LoaDataset():
             name = name
         )   
 
+        testset.tags.append('test')
+        for sample in testset.iter_samples(progress=True):
+            sample.tags.append('test')
+            sample.save()
+        testset.save()
+
         testset.persistent = True
         
         return testset
@@ -67,19 +91,23 @@ class GetDataset():
     def __init__(self):
         
         self.datasets = self.check_dataset()
-        self.train_set = fo.load_dataset("Aerial_Maritime_trainset")
-        self.valid_set = fo.load_dataset("Aerial_Maritime_validset")
-        self.test_set = fo.load_dataset("Aerial_Maritime_testset")
+        self.train_set = fo.load_dataset("trainset")
+        self.valid_set = fo.load_dataset("validset")
+        self.test_set = fo.load_dataset("testset")
         
     def check_dataset(self):
         
         dataset = None
-        if not fo.dataset_exists("Aerial_Maritime_trainset"):
+        if not fo.dataset_exists("trainset"):
             dataset = LoaDataset()
             
         return dataset
 
 if __name__ == "__main__":
     
-    session = fo.launch_app(desktop=True)
-    session.wait()
+    #dataset = LoaDataset().dataset
+    #trainset = fo.load_dataset("trainset")
+    #print (trainset)
+    #dataset = fo.load_dataset("validset")
+    #dataset.delete()
+    print(fo.list_datasets())
