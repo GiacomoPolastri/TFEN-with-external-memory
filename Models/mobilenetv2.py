@@ -99,6 +99,19 @@ class InvertedResidual(nn.Module):
         else:
             return self.conv(x)
 
+# TODO: create a class for adding CBAM to the neural network
+class AddCBAM(nn.Module):
+    def __init__(self,output_channel):
+        super(AddCBAM, self).__init__()
+        self.cbam = nn.Sequential
+        (
+            CBAM(output_channel),
+        )
+        
+    def forward(self, x):
+        
+        return x + self.cbam(x)
+        
 
 class MobileNetV2(Backbone):
     def __init__(self, cfg, num_classes=5, input_size=224, width_mult=1.):
@@ -125,6 +138,7 @@ class MobileNetV2(Backbone):
         self.features = nn.ModuleList([conv_3x3_bn(3, input_channel, 2)]) #original 2
         # building inverted residual blocks
         block = InvertedResidual
+        blockCBAM = AddCBAM
         for t, c, n, s in self.cfgs:
             output_channel = _make_divisible(c * width_mult, 4 if width_mult == 0.1 else 8)
             for i in range(n):
@@ -132,7 +146,7 @@ class MobileNetV2(Backbone):
                 input_channel = output_channel
                 if len(self.features) - 1 in self.return_features_indices:
                     self.return_features_num_channels.append(output_channel)
-        self.features.append(CBAM(output_channel))
+        self.features.append(blockCBAM(output_channel))
         input_channel = output_channel
         if len(self.features) - 1 in self.return_features_indices:
             self.return_features_num_channels.append(output_channel)
@@ -175,7 +189,7 @@ class MobileNetV2(Backbone):
                 
                 
 @BACKBONE_REGISTRY.register()
-def build_mnv2_backbone(cfg, input_shape):
+def build_mnv2_classCBAM_backbone(cfg, input_shape):
     """
     Create a MobileNetV2 instance from config.
     Returns:
@@ -191,7 +205,7 @@ def build_mnv2_backbone(cfg, input_shape):
     model._out_feature_strides = out_feature_strides
     return model
 
-
+'''
 @BACKBONE_REGISTRY.register()
 def build_mobilenetv2_fpn_backbone(cfg, input_shape: ShapeSpec):
     """
@@ -212,3 +226,4 @@ def build_mobilenetv2_fpn_backbone(cfg, input_shape: ShapeSpec):
         fuse_type=cfg.MODEL.FPN.FUSE_TYPE,
     )
     return backbone
+'''
