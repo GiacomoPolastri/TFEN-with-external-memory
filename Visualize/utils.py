@@ -2,8 +2,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 from Models import CBAM as convbam
-from runtime_args import args    
-import fiftyone as fo
+from runtime_args import args   
+import fiftyone as fo  
 
 class Layers ():
     
@@ -85,18 +85,38 @@ def normalize (input):
         for j in range(len(input)):
             input[j] -= np.amin(input[j])
             input[j] += np.amin(input[j])
+    return input
             
+
 def detectron_to_fo(outputs, img_w, img_h):
     # format is documented at https://detectron2.readthedocs.io/tutorials/models.html#model-output-format
     detections = []
     instances = outputs["instances"].to("cpu")
-    for pred_box, score, c, mask in zip(
-        instances.pred_boxes, instances.scores, instances.pred_classes, instances.pred_masks,
+    for pred_box, score, c in zip(
+        instances.pred_boxes, instances.scores, instances.pred_classes,
     ):
         x1, y1, x2, y2 = pred_box
-        fo_mask = mask.numpy()[int(y1):int(y2), int(x1):int(x2)]
         bbox = [float(x1)/img_w, float(y1)/img_h, float(x2-x1)/img_w, float(y2-y1)/img_h]
-        detection = fo.Detection(label="Vehicle registration plate", confidence=float(score), bounding_box=bbox, mask=fo_mask)
+        detection = fo.Detection(label = pred_classes_to_label(c), confidence=float(score), bounding_box=bbox)
+        
         detections.append(detection)
 
     return fo.Detections(detections=detections)
+
+def pred_classes_to_label(pc):
+    label = 'none'
+    if pc == 1:
+        label = 'boat'
+        return label
+    if pc == 2:
+        label = 'car'
+        return label
+    if pc == 3:
+        label = 'dock'
+        return label
+    if pc == 4:
+        label = 'jetski'
+        return label
+    if pc == 0:
+        label = 'lift'
+        return label
